@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 513796949617009659}
   serializedVersion: 2
   m_LocalRotation: {x: 0.00000008145155, y: 0.014707355, z: -0.0000000011980673, w: 0.9998919}
-  m_LocalPosition: {x: 55.298172, y: 29.064503, z: 113.60405}
+  m_LocalPosition: {x: 55.298172, y: 33.6, z: 113.60405}
   m_LocalScale: {x: 100.000015, y: 100, z: 100.000015}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -41,7 +41,7 @@ WheelCollider:
   m_GameObject: {fileID: 513796949617009659}
   serializedVersion: 2
   m_Center: {x: 0, y: 0.1, z: 0}
-  m_Radius: 0.36
+  m_Radius: 0.3
   m_SuspensionSpring:
     spring: 35000
     damper: 4500
@@ -333,7 +333,7 @@ Transform:
   m_GameObject: {fileID: 2608614429228040015}
   serializedVersion: 2
   m_LocalRotation: {x: 0.00000008145155, y: 0.014707355, z: -0.0000000011980673, w: 0.9998919}
-  m_LocalPosition: {x: 48.3, y: 29.1, z: -127.6}
+  m_LocalPosition: {x: 48.3, y: 33.6, z: -127.6}
   m_LocalScale: {x: 100.000015, y: 100, z: 100.000015}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -348,7 +348,7 @@ WheelCollider:
   m_GameObject: {fileID: 2608614429228040015}
   serializedVersion: 2
   m_Center: {x: 0, y: 0.1, z: 0}
-  m_Radius: 0.36
+  m_Radius: 0.3
   m_SuspensionSpring:
     spring: 35000
     damper: 4500
@@ -487,7 +487,7 @@ Transform:
   m_GameObject: {fileID: 4221730879153492345}
   serializedVersion: 2
   m_LocalRotation: {x: 0.00000008145155, y: 0.014707355, z: -0.0000000011980673, w: 0.9998919}
-  m_LocalPosition: {x: -37.193604, y: 29.064503, z: 47.18392}
+  m_LocalPosition: {x: -37.193604, y: 33.6, z: 47.18392}
   m_LocalScale: {x: 100.000015, y: 100, z: 100.000015}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -502,7 +502,7 @@ WheelCollider:
   m_GameObject: {fileID: 4221730879153492345}
   serializedVersion: 2
   m_Center: {x: 0, y: 0.1, z: 0}
-  m_Radius: 0.36
+  m_Radius: 0.3
   m_SuspensionSpring:
     spring: 35000
     damper: 4500
@@ -663,7 +663,7 @@ GameObject:
   - component: {fileID: 3100947074649675955}
   - component: {fileID: 3984761317838490702}
   - component: {fileID: 2101354807771447878}
-  - component: {fileID: 1071531268397976900}
+  - component: {fileID: 6841674981389096250}
   m_Layer: 0
   m_Name: Car
   m_TagString: Untagged
@@ -736,8 +736,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &1071531268397976900
-MeshCollider:
+--- !u!65 &6841674981389096250
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -754,10 +754,9 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -8039613103989778838, guid: e17c7012aa6738e46b573a11d9e1cafb, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 3.5700784, y: 0.66896784, z: 1.6006234}
+  m_Center: {x: -0.0013109195, y: 1.0050812, z: 0.0163043}
 --- !u!1 &5425549862402097590
 GameObject:
   m_ObjectHideFlags: 0
@@ -867,7 +866,7 @@ Transform:
   m_GameObject: {fileID: 5593663225055618844}
   serializedVersion: 2
   m_LocalRotation: {x: 0.00000008145155, y: 0.014707355, z: -0.0000000011980673, w: 0.9998919}
-  m_LocalPosition: {x: -42.4, y: 29.1, z: -128.6}
+  m_LocalPosition: {x: -42.3, y: 33.6, z: -124.2}
   m_LocalScale: {x: 100.000015, y: 100, z: 100.000015}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -882,7 +881,7 @@ WheelCollider:
   m_GameObject: {fileID: 5593663225055618844}
   serializedVersion: 2
   m_Center: {x: 0, y: 0.1, z: 0}
-  m_Radius: 0.36
+  m_Radius: 0.3
   m_SuspensionSpring:
     spring: 35000
     damper: 4500
@@ -987,7 +986,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de03bdf53d10d5d48b353c5c5e29ade1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxAcceleration: 30
+  maxAcceleration: 300
   wheels:
   - wheelModel: {fileID: 3489573000845337728}
     wheelCollider: {fileID: 1643064562012488366}
@@ -1027,7 +1026,7 @@ Transform:
   m_GameObject: {fileID: 7490720670934595573}
   serializedVersion: 2
   m_LocalRotation: {x: 0.00000008145155, y: 0.014707355, z: -0.0000000011980673, w: 0.9998919}
-  m_LocalPosition: {x: 53.265694, y: 29.064503, z: 44.522167}
+  m_LocalPosition: {x: 53.265694, y: 33.6, z: 44.522167}
   m_LocalScale: {x: 100.000015, y: 100, z: 100.000015}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1042,7 +1041,7 @@ WheelCollider:
   m_GameObject: {fileID: 7490720670934595573}
   serializedVersion: 2
   m_Center: {x: 0, y: 0.1, z: 0}
-  m_Radius: 0.36
+  m_Radius: 0.3
   m_SuspensionSpring:
     spring: 35000
     damper: 4500
@@ -1181,7 +1180,7 @@ Transform:
   m_GameObject: {fileID: 8334651170997343232}
   serializedVersion: 2
   m_LocalRotation: {x: 0.00000008145155, y: 0.014707355, z: -0.0000000011980673, w: 0.9998919}
-  m_LocalPosition: {x: -35.160824, y: 29.064503, z: 116.26573}
+  m_LocalPosition: {x: -35.160824, y: 33.6, z: 116.26573}
   m_LocalScale: {x: 100.000015, y: 100, z: 100.000015}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1196,7 +1195,7 @@ WheelCollider:
   m_GameObject: {fileID: 8334651170997343232}
   serializedVersion: 2
   m_Center: {x: 0, y: 0.1, z: 0}
-  m_Radius: 0.36
+  m_Radius: 0.3
   m_SuspensionSpring:
     spring: 35000
     damper: 4500
