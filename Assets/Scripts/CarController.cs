@@ -1,9 +1,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Collections;
 
 public class CarController : MonoBehaviour
 {
+    public int maxFuel = 20;
+    public int currentFuel = 0;
+    public FuelBar fuelBar;
+
+
     [Serializable]
     public struct Wheel
     {
@@ -22,12 +28,17 @@ public class CarController : MonoBehaviour
     private void Start()
     {
         carRb = GetComponent<Rigidbody>();
+        currentFuel = maxFuel;
+        fuelBar.setMaxFuel(maxFuel);
+
+        StartCoroutine(DecreaseFuelOverTime());
     }
 
     private void Update()
     {
         getInput();
         wheelAnimation();
+
     }
     private void LateUpdate()
     {
@@ -40,9 +51,12 @@ public class CarController : MonoBehaviour
     
     private void Move()
     {
-        foreach (var wheel in wheels)
+        if(currentFuel > 0)
         {
-            wheel.wheelCollider.motorTorque = -moveInput * 600 * maxAcceleration * Time.deltaTime;
+            foreach (var wheel in wheels)
+            {
+                wheel.wheelCollider.motorTorque = -moveInput * 600 * maxAcceleration * Time.deltaTime;
+            }
         }
     }
     private void wheelAnimation()
@@ -54,6 +68,20 @@ public class CarController : MonoBehaviour
             wheel.wheelCollider.GetWorldPose(out position, out rotation);
             wheel.wheelModel.transform.position = position;
             wheel.wheelModel.transform.rotation = rotation;
+        }
+    }
+
+    private IEnumerator DecreaseFuelOverTime()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(1f);
+            currentFuel = Mathf.Max(0, currentFuel - 1);
+            fuelBar.setFuel(currentFuel);
+            if (currentFuel <= 0)
+            {
+                break;
+            }
         }
     }
 }
