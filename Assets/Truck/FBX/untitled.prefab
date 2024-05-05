@@ -852,6 +852,7 @@ GameObject:
   - component: {fileID: 3338759901539411089}
   - component: {fileID: 7540412771850731387}
   - component: {fileID: 9019112064129706594}
+  - component: {fileID: 5638900131543655776}
   m_Layer: 0
   m_Name: untitled
   m_TagString: Vehicle
@@ -934,6 +935,18 @@ MonoBehaviour:
     wheelCollider: {fileID: 1338395895261549362}
   - wheelModel: {fileID: 8013423275679910046}
     wheelCollider: {fileID: 4908625320413729214}
+--- !u!114 &5638900131543655776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6724011480544219581}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d29f23eb8506ea34596e07fc309b17ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6905198907398865615
 GameObject:
   m_ObjectHideFlags: 0
