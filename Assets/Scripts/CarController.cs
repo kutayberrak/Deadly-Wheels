@@ -52,10 +52,16 @@ public class CarController : MonoBehaviour
     {
         if (currentFuel > 0)
         {
-
             foreach (var wheel in wheels)
             {
                 wheel.wheelCollider.motorTorque = moveInput * 600 * maxAcceleration * Time.deltaTime;
+            }
+        }
+        else
+        {
+            foreach (var wheel in wheels)
+            {
+                wheel.wheelCollider.motorTorque = 0 * 600 * maxAcceleration * Time.deltaTime;
             }
         }
     }
