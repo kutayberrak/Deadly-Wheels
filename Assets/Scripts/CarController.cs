@@ -8,6 +8,7 @@ public class CarController : MonoBehaviour
     public int maxFuel = 20;
     public int currentFuel = 0;
     public FuelBar fuelBar;
+    private Collectible collectible;
 
     [Serializable]
     public struct Wheel
@@ -30,6 +31,7 @@ public class CarController : MonoBehaviour
         fuelBar.setMaxFuel(maxFuel);
 
         StartCoroutine(DecreaseFuelOverTime());
+        collectible = transform.GetComponent<Collectible>();
     }
 
     private void Update()
@@ -59,6 +61,8 @@ public class CarController : MonoBehaviour
         }
         else
         {
+            collectible.enabled = false;
+
             foreach (var wheel in wheels)
             {
                 wheel.wheelCollider.motorTorque = 0 * 600 * maxAcceleration * Time.deltaTime;
