@@ -38,6 +38,8 @@ public class CarController : MonoBehaviour
     {
         GetInput();
         AnimateWheels();
+
+        transform.position = new Vector3(transform.position.x, transform.position.y, 225f);
     }
 
     private void LateUpdate()
