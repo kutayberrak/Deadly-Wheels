@@ -7,14 +7,14 @@ public class TurretController : MonoBehaviour
     public float bulletSpeed = 30f;
     public int maxAmmo = 5;
     private int currentAmmo;
-    private float fireCooldown = 1f; 
-    private float cooldownTimer = 0f; 
-    private GameObject currentTarget; 
-    private bool isActive = true; 
+    private float fireCooldown = 1f;
+    private float cooldownTimer = 0f;
+    private GameObject currentTarget;
+    private bool isActive = true;
 
     void Start()
     {
-        currentAmmo = maxAmmo; 
+        currentAmmo = maxAmmo;
     }
 
     void Update()
@@ -27,11 +27,11 @@ public class TurretController : MonoBehaviour
                 if (currentAmmo > 0)
                 {
                     FireBullet();
-                    cooldownTimer = fireCooldown; 
+                    cooldownTimer = fireCooldown;
                 }
                 else
                 {
-                    isActive = false; 
+                    isActive = false;
                 }
             }
         }
@@ -41,7 +41,7 @@ public class TurretController : MonoBehaviour
     {
         if (other.CompareTag("Enemy") && isActive)
         {
-            currentTarget = other.gameObject; 
+            currentTarget = other.gameObject;
         }
     }
 
@@ -49,7 +49,7 @@ public class TurretController : MonoBehaviour
     {
         if (other.CompareTag("Enemy") && other.gameObject == currentTarget)
         {
-            currentTarget = null; 
+            currentTarget = null;
         }
     }
 
@@ -57,11 +57,11 @@ public class TurretController : MonoBehaviour
     {
         if (currentTarget != null)
         {
-            GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation); 
-            Vector3 targetPosition = currentTarget.transform.position + Vector3.up * 3f; 
+            GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+            Vector3 targetPosition = currentTarget.transform.position + Vector3.up * 3f;
             Vector3 direction = (targetPosition - firePoint.position).normalized;
-            bullet.GetComponent<Rigidbody>().velocity = direction * bulletSpeed * 7; 
-            currentAmmo--; 
+            bullet.GetComponent<Rigidbody>().velocity = direction * bulletSpeed * 7;
+            currentAmmo--;
         }
     }
 }

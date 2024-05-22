@@ -28,16 +28,38 @@ public class Collectible : MonoBehaviour
             GainCoinAtPositionX();
             lastCoinPositionX = currentPositionX;
         }
+
+        boltCounterText.text = boltCounter.ToString();
+        coinCounterText.text = coinCounter.ToString();
+
     }
 
     public void IncreaseBoltCount()
     {
         boltCounter++;
-        boltCounterText.text = boltCounter.ToString();
     }
     public void GainCoinAtPositionX()
     {
         coinCounter++;
-        coinCounterText.text = coinCounter.ToString();
+    }
+
+    public void setCoin(int coin)  //For debug
+    {
+        coinCounter = coin;
+    }
+
+    public int getCoin()
+    {
+        return coinCounter;
+    }
+
+    public void setBolt(int bolt)  //For debug
+    {
+        boltCounter = bolt;
+    }
+
+    public int getBolt()
+    {
+        return boltCounter;
     }
 }
