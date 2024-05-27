@@ -32,7 +32,6 @@ public class CameraMovement : MonoBehaviour
 
     void GameCamView()
     {
-        //Vector3 targetPosition = target.position + offset;
         transform.position = target.position + offset;
         transform.LookAt(target.position);
     }

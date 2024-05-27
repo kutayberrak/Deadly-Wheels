@@ -270,8 +270,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4789211385024478293}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.00000049274723, y: 52.7, z: -0.44090742}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.0000004927472, y: 52.7, z: -0.4409074}
   m_LocalScale: {x: 1, y: 1.2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -361,6 +361,7 @@ GameObject:
   - component: {fileID: 2778791729388118071}
   - component: {fileID: 2425181541314085105}
   - component: {fileID: 2996951852705959884}
+  - component: {fileID: 2617293884191709821}
   m_Layer: 0
   m_Name: _MG_turret_portable
   m_TagString: Untagged
@@ -447,7 +448,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3c5c83cb67052349b460ee9ac1a87d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: 1998029105991668262, guid: 5e32c9ee317cada4fbdbd5ff14812471, type: 3}
-  firePoint: {fileID: 6898910245811897261}
-  bulletSpeed: 30
+  turretAnimation: {fileID: 2617293884191709821}
   maxAmmo: 5
+--- !u!95 &2617293884191709821
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4789211385024478295}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 797d6b6f1899c7644bb797bceeb3ff93, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
