@@ -7,6 +7,8 @@ public class CarController : MonoBehaviour
 {
     public int maxFuel = 20;
     public int currentFuel = 0;
+    public bool isLost;
+    public bool isWin;
     public FuelBar fuelBar;
     private Collectible collectible;
 
@@ -34,7 +36,7 @@ public class CarController : MonoBehaviour
         currentFuel = maxFuel;
         fuelBar.setMaxFuel(maxFuel);
 
-        StartCoroutine(DecreaseFuelOverTime());
+        //StartCoroutine(DecreaseFuelOverTime());
         collectible = transform.GetComponent<Collectible>();
     }
 
@@ -58,7 +60,7 @@ public class CarController : MonoBehaviour
 
     void Move()
     {
-        if (currentFuel > 0)
+        if (CheckFuel() && !isWin)
         {
             foreach (var wheel in wheels)
             {
@@ -88,10 +90,16 @@ public class CarController : MonoBehaviour
             smokeEffect2.Stop();
             collectible.enabled = false;
 
+            float deceleration = 7f; 
+            rb.velocity = Vector3.MoveTowards(rb.velocity, Vector3.zero, deceleration * Time.deltaTime);
             foreach (var wheel in wheels)
             {
                 wheel.wheelCollider.motorTorque = 0 * 600 * maxAcceleration * Time.deltaTime;
-                
+            }
+
+            if (CheckVelocity() && !isWin)
+            {
+                isLost = true;
             }
         }
     }
@@ -127,7 +135,7 @@ public class CarController : MonoBehaviour
         }
     }
 
-    private IEnumerator DecreaseFuelOverTime()
+    public IEnumerator DecreaseFuelOverTime()
     {
         while (true)
         {
@@ -138,6 +146,29 @@ public class CarController : MonoBehaviour
             {
                 break;
             }
+        }
+    }
+
+    private bool CheckFuel()
+    {
+        return currentFuel != 0;
+    }
+
+    private bool CheckVelocity()
+    {
+        return rb.velocity.magnitude == 0;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Target"))
+        {
+            rb.velocity = Vector3.zero;
+            foreach (var wheel in wheels)
+            {
+                wheel.wheelCollider.motorTorque = 0 * 600 * maxAcceleration * Time.deltaTime;
+            }
+            isWin = true;
         }
     }
 }

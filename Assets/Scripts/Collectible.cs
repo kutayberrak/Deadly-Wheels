@@ -11,7 +11,7 @@ public class Collectible : MonoBehaviour
     private float lastCoinPositionX;
     float currentPositionX;
     private float coinDistanceThreshold = 10f;
-    float distanceTraveled;
+    public float distanceTraveled;
 
 
     private void Start()
@@ -43,7 +43,7 @@ public class Collectible : MonoBehaviour
         coinCounter++;
     }
 
-    public void setCoin(int coin)  //For debug
+    public void setCoin(int coin)  //For debug button
     {
         coinCounter = coin;
     }
@@ -53,7 +53,7 @@ public class Collectible : MonoBehaviour
         return coinCounter;
     }
 
-    public void setBolt(int bolt)  //For debug
+    public void setBolt(int bolt)  //For debug button
     {
         boltCounter = bolt;
     }

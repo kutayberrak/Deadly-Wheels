@@ -6,6 +6,7 @@ public class ZombieBehaviour : MonoBehaviour
 {
     public Animator animator;
     private bool hit = false; 
+    public int deathCounter = 0;
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -13,7 +14,7 @@ public class ZombieBehaviour : MonoBehaviour
         {
             hit = true;
             animator.SetTrigger("isHit");
-
+            deathCounter += 1;
             StartCoroutine(DestroyAfterAnimation());
         }
     }

@@ -8,6 +8,7 @@ public class UIManager : MonoBehaviour
     public GameObject vehicle;
     public GameObject topUI;
     public GameObject turret;
+    public GameObject feedbackPanel;
 
     public Button upgradeFuelCapacityButton;
     public TextMeshProUGUI requiredCoinText;
@@ -28,21 +29,30 @@ public class UIManager : MonoBehaviour
     private CameraMovement cameraMovement;
     private CarController carController;
     private Collectible collectible;
+    //private ZombieBehaviour zombieBehaviour;
 
     public TextMeshProUGUI fuelCapacityText;
     private int fuelCapacityLevel = 0;
 
     public TextMeshProUGUI enginePowerText;
     private int enginePowerLevel = 0;
+
+
+    public TextMeshProUGUI feedBackText;
+    public TextMeshProUGUI subFeedBackText;
+    private Vector3 initialPosition;
     void Start()
     {
         topUI.SetActive(false);
+        feedbackPanel.SetActive(false);
         cameraMovement = FindObjectOfType<CameraMovement>();
         carController = FindObjectOfType<CarController>();
         collectible = FindObjectOfType<Collectible>();
+        //zombieBehaviour = FindObjectOfType<ZombieBehaviour>();
 
         fuelCapacityText.text = "Fuel Capacity Lvl. " + fuelCapacityLevel.ToString();
         enginePowerText.text = "Engine Power Lvl. " + enginePowerLevel.ToString();
+        initialPosition = vehicle.transform.position;
     }
 
     public void StartGame()
@@ -51,6 +61,7 @@ public class UIManager : MonoBehaviour
         topUI.SetActive(true);
         vehicle.GetComponent<CarController>().enabled = true;
         cameraMovement.ToggleCameraMode();
+        StartCoroutine(carController.DecreaseFuelOverTime());
     }
 
 
@@ -125,5 +136,42 @@ public class UIManager : MonoBehaviour
     public void SetBoltDebug()
     {
         collectible.setBolt(collectible.getBolt() + 100);
+    }
+
+    private void Update()
+    {
+        ShowFeedbackPanel();    
+    }
+
+    public void ShowFeedbackPanel()
+    {
+        if (carController.isLost){
+            feedbackPanel.SetActive(true);
+            feedBackText.text = "You Lost";
+            subFeedBackText.text = "The fuel is depleted!";
+            //totalDistanceText.text = collectible.distanceTraveled.ToString() + " m";
+            //killedZombieText.text = zombieBehaviour.deathCounter.ToString();
+        }
+
+        else if (carController.isWin)
+        {
+            feedbackPanel.SetActive(true);
+            feedBackText.text = "You Won";
+            subFeedBackText.text = "You successfully reached your destination!";
+        } 
+    }
+
+    public void Restart()
+    {
+        carController.isLost = false;
+        carController.isWin = false;
+        vehicle.transform.position = initialPosition + new Vector3(0,1,0);
+        vehicle.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        feedbackPanel.SetActive(false);
+        cameraMovement.ToggleCameraMode();
+        marketPanel.SetActive(true);
+        topUI.SetActive(false);
+        carController.currentFuel = carController.maxFuel;
+        vehicle.GetComponent<CarController>().enabled = false;
     }
 }

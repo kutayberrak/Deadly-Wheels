@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Vehicle
   - Enemy
+  - Target
   layers:
   - Default
   - TransparentFX
