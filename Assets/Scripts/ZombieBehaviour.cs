@@ -19,10 +19,9 @@ public class ZombieBehaviour : MonoBehaviour
         }
     }
 
-    IEnumerator DestroyAfterAnimation()
+    public IEnumerator DestroyAfterAnimation()
     {
         yield return new WaitForSeconds(1);
-
         Destroy(gameObject);
     }
 }

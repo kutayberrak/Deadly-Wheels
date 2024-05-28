@@ -7,6 +7,8 @@ TagManager:
   - Vehicle
   - Enemy
   - Target
+  - Barrel
+  - Bolt
   layers:
   - Default
   - TransparentFX

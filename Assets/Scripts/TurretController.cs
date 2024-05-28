@@ -16,9 +16,7 @@ public class TurretController : MonoBehaviour
     {
         if (other.CompareTag("Enemy") && currentAmmo > 0)
         {
-            
             currentTarget = other.gameObject;
-
             turretAnimation.SetTrigger("FireBullet");
         }
     }
@@ -26,7 +24,12 @@ public class TurretController : MonoBehaviour
     {
         if (currentTarget != null)
         {
-            Destroy(currentTarget);
+            ZombieBehaviour zombieBehaviour = currentTarget.GetComponent<ZombieBehaviour>();
+            Animator targetAnimator = currentTarget.GetComponent<Animator>();
+
+            targetAnimator.SetTrigger("isHit");
+            StartCoroutine(zombieBehaviour.DestroyAfterAnimation());
+
             currentAmmo--;
         }
     }

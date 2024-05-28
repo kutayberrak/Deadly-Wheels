@@ -62,6 +62,7 @@ public class CarController : MonoBehaviour
     {
         if (CheckFuel() && !isWin)
         {
+            collectible.enabled = true;
             foreach (var wheel in wheels)
             {
                 wheel.wheelCollider.motorTorque = -moveInput * 600 * maxAcceleration * Time.deltaTime;

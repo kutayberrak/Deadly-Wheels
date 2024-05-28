@@ -29,6 +29,7 @@ public class UIManager : MonoBehaviour
     private CameraMovement cameraMovement;
     private CarController carController;
     private Collectible collectible;
+    private ZombieSpawner zombieSpawner;
     //private ZombieBehaviour zombieBehaviour;
 
     public TextMeshProUGUI fuelCapacityText;
@@ -48,6 +49,7 @@ public class UIManager : MonoBehaviour
         cameraMovement = FindObjectOfType<CameraMovement>();
         carController = FindObjectOfType<CarController>();
         collectible = FindObjectOfType<Collectible>();
+        zombieSpawner = FindObjectOfType<ZombieSpawner>();
         //zombieBehaviour = FindObjectOfType<ZombieBehaviour>();
 
         fuelCapacityText.text = "Fuel Capacity Lvl. " + fuelCapacityLevel.ToString();
@@ -55,55 +57,80 @@ public class UIManager : MonoBehaviour
         initialPosition = vehicle.transform.position;
     }
 
+    
+
     public void StartGame()
     {
         marketPanel.SetActive(false);
         topUI.SetActive(true);
         vehicle.GetComponent<CarController>().enabled = true;
         cameraMovement.ToggleCameraMode();
+        carController.currentFuel = carController.maxFuel;
+        carController.fuelBar.setMaxFuel(carController.maxFuel);
         StartCoroutine(carController.DecreaseFuelOverTime());
+        zombieSpawner.SpawnZombies();
     }
 
 
     public void UpgradeFuelCapacity()
     {
-        int requiredCoin = int.Parse(requiredCoinText.text);
-        int requiredBolt = int.Parse(requiredBoltText.text);
-        if (collectible.getCoin() >= requiredCoin && collectible.getBolt() >= requiredBolt)
+        if (fuelCapacityLevel < 10)
         {
-            fuelCapacityLevel += 1;
-            fuelCapacityText.text = "Fuel Capacity Lvl. " + fuelCapacityLevel.ToString();
-            requiredCoinText.text = (requiredCoin + 100).ToString();
-            requiredBoltText.text = (requiredBolt + 5).ToString();
-            carController.maxFuel += 5;
-            fuelCapacitySlider.value += 1;
-            collectible.setCoin(collectible.getCoin() - requiredCoin);
-            collectible.setBolt(collectible.getBolt() - requiredBolt);
-        }
-        else
-        {
-            Debug.Log("Sources are not enough!");
+            int requiredCoin = int.Parse(requiredCoinText.text);
+            int requiredBolt = int.Parse(requiredBoltText.text);
+            if (collectible.getCoin() >= requiredCoin && collectible.getBolt() >= requiredBolt)
+            {
+                fuelCapacityLevel += 1;
+                fuelCapacityText.text = "Fuel Capacity Lvl. " + fuelCapacityLevel.ToString();
+                requiredCoinText.text = (requiredCoin + 100).ToString();
+                requiredBoltText.text = (requiredBolt + 5).ToString();
+                carController.maxFuel += 5;
+                fuelCapacitySlider.value += 1;
+                collectible.setCoin(collectible.getCoin() - requiredCoin);
+                collectible.setBolt(collectible.getBolt() - requiredBolt);
+
+                if(fuelCapacityLevel == 10)
+                {
+                    fuelCapacityText.text = "Fuel Capacity Lvl. MAX";
+                    requiredCoinText.text = "MAX";
+                    requiredBoltText.text = "MAX";
+                }
+            }
+            else
+            {
+                Debug.Log("Sources are not enough!");
+            }
         }
     }
 
     public void UpgradeEnginePower()
     {
-        int requiredCoin = int.Parse(requiredCoinTextEngine.text);
-        int requiredBolt = int.Parse(requiredBoltTextEngine.text);
-        if (collectible.getCoin() >= requiredCoin && collectible.getBolt() >= requiredBolt)
+        if (enginePowerLevel < 10)
         {
-            enginePowerLevel += 1;
-            enginePowerText.text = "Engine Power Lvl. " + enginePowerLevel.ToString();
-            requiredCoinTextEngine.text = (requiredCoin + 200).ToString();
-            requiredBoltTextEngine.text = (requiredBolt + 10).ToString();
-            carController.maxAcceleration += 50;
-            enginePowerSlider.value += 1;
-            collectible.setCoin(collectible.getCoin() - requiredCoin);
-            collectible.setBolt(collectible.getBolt() - requiredBolt);
-        }
-        else
-        {
-            Debug.Log("Sources are not enough!");
+            int requiredCoin = int.Parse(requiredCoinTextEngine.text);
+            int requiredBolt = int.Parse(requiredBoltTextEngine.text);
+            if (collectible.getCoin() >= requiredCoin && collectible.getBolt() >= requiredBolt)
+            {
+                enginePowerLevel += 1;
+                enginePowerText.text = "Engine Power Lvl. " + enginePowerLevel.ToString();
+                requiredCoinTextEngine.text = (requiredCoin + 200).ToString();
+                requiredBoltTextEngine.text = (requiredBolt + 10).ToString();
+                carController.maxAcceleration += 50;
+                enginePowerSlider.value += 1;
+                collectible.setCoin(collectible.getCoin() - requiredCoin);
+                collectible.setBolt(collectible.getBolt() - requiredBolt);
+
+                if(enginePowerLevel == 10)
+                {
+                    enginePowerText.text = "Engine Power Lvl. MAX";
+                    requiredCoinTextEngine.text = "MAX";
+                    requiredBoltTextEngine.text = "MAX";
+                }
+            }
+            else
+            {
+                Debug.Log("Sources are not enough!");
+            }
         }
     }
 
@@ -140,7 +167,9 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
-        ShowFeedbackPanel();    
+        ShowFeedbackPanel();
+        collectible.boltCounterText.text = collectible.getBolt().ToString();
+        collectible.coinCounterText.text = collectible.getCoin().ToString();
     }
 
     public void ShowFeedbackPanel()
@@ -167,11 +196,12 @@ public class UIManager : MonoBehaviour
         carController.isWin = false;
         vehicle.transform.position = initialPosition + new Vector3(0,1,0);
         vehicle.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        vehicle.transform.rotation = Quaternion.Euler(0, -90, 0);
         feedbackPanel.SetActive(false);
         cameraMovement.ToggleCameraMode();
         marketPanel.SetActive(true);
         topUI.SetActive(false);
-        carController.currentFuel = carController.maxFuel;
         vehicle.GetComponent<CarController>().enabled = false;
+        zombieSpawner.DestroyAllPrefabs();
     }
 }
