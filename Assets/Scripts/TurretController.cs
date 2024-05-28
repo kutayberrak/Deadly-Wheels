@@ -4,9 +4,8 @@ public class TurretController : MonoBehaviour
 {
     public Animator turretAnimation;
     public int maxAmmo = 5;
-    private int currentAmmo;
+    public int currentAmmo;
     private GameObject currentTarget;
-
     void Start()
     {
         currentAmmo = maxAmmo;

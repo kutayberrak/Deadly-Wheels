@@ -23,6 +23,10 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI requiredCoinTextTurret;
     public TextMeshProUGUI requiredBoltTextTurret;
 
+    public Button purchaseAmmoButton;
+    public TextMeshProUGUI ammoText;
+
+
     public Slider fuelCapacitySlider; 
     public Slider enginePowerSlider; 
 
@@ -30,6 +34,7 @@ public class UIManager : MonoBehaviour
     private CarController carController;
     private Collectible collectible;
     private ZombieSpawner zombieSpawner;
+    private TurretController turretController;
     //private ZombieBehaviour zombieBehaviour;
 
     public TextMeshProUGUI fuelCapacityText;
@@ -46,6 +51,7 @@ public class UIManager : MonoBehaviour
     {
         topUI.SetActive(false);
         feedbackPanel.SetActive(false);
+        purchaseAmmoButton.interactable = false;
         cameraMovement = FindObjectOfType<CameraMovement>();
         carController = FindObjectOfType<CarController>();
         collectible = FindObjectOfType<Collectible>();
@@ -147,6 +153,27 @@ public class UIManager : MonoBehaviour
             purchaseTurretButton.interactable = false;
             purchaseTurretButtonText.text = "Purchased";
             turret.SetActive(true);
+            purchaseAmmoButton.interactable = true;
+            turretController = FindAnyObjectByType<TurretController>();
+            ammoText.text = turretController.maxAmmo.ToString();
+        }
+        else
+        {
+            Debug.Log("Sources are not enough!");
+        }
+    }
+
+    public void purchaseAmmo()
+    {
+        int requiredCoin = 100;
+        int requiredBolt = 10;
+        if (collectible.getCoin() >= requiredCoin && collectible.getBolt() >= requiredBolt)
+        {
+            collectible.setCoin(collectible.getCoin() - requiredCoin);
+            collectible.setBolt(collectible.getBolt() - requiredBolt);
+            turretController.maxAmmo += 5;
+            turretController.currentAmmo = turretController.maxAmmo;
+            ammoText.text = turretController.maxAmmo.ToString();
         }
         else
         {
@@ -170,6 +197,10 @@ public class UIManager : MonoBehaviour
         ShowFeedbackPanel();
         collectible.boltCounterText.text = collectible.getBolt().ToString();
         collectible.coinCounterText.text = collectible.getCoin().ToString();
+        if(turretController != null)
+        {
+            ammoText.text = turretController.currentAmmo.ToString();
+        }
     }
 
     public void ShowFeedbackPanel()
@@ -203,5 +234,10 @@ public class UIManager : MonoBehaviour
         topUI.SetActive(false);
         vehicle.GetComponent<CarController>().enabled = false;
         zombieSpawner.DestroyAllPrefabs();
+
+        if (turretController != null)
+        {
+            turretController.currentAmmo = turretController.maxAmmo;
+        }
     }
 }
