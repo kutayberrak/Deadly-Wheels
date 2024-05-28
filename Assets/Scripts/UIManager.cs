@@ -33,7 +33,7 @@ public class UIManager : MonoBehaviour
     private CameraMovement cameraMovement;
     private CarController carController;
     private Collectible collectible;
-    private ZombieSpawner zombieSpawner;
+    private Spawner zombieSpawner;
     private TurretController turretController;
     //private ZombieBehaviour zombieBehaviour;
 
@@ -55,7 +55,7 @@ public class UIManager : MonoBehaviour
         cameraMovement = FindObjectOfType<CameraMovement>();
         carController = FindObjectOfType<CarController>();
         collectible = FindObjectOfType<Collectible>();
-        zombieSpawner = FindObjectOfType<ZombieSpawner>();
+        zombieSpawner = FindObjectOfType<Spawner>();
         //zombieBehaviour = FindObjectOfType<ZombieBehaviour>();
 
         fuelCapacityText.text = "Fuel Capacity Lvl. " + fuelCapacityLevel.ToString();
@@ -74,7 +74,7 @@ public class UIManager : MonoBehaviour
         carController.currentFuel = carController.maxFuel;
         carController.fuelBar.setMaxFuel(carController.maxFuel);
         StartCoroutine(carController.DecreaseFuelOverTime());
-        zombieSpawner.SpawnZombies();
+        zombieSpawner.SpawnPrefabs();
     }
 
 
@@ -90,7 +90,7 @@ public class UIManager : MonoBehaviour
                 fuelCapacityText.text = "Fuel Capacity Lvl. " + fuelCapacityLevel.ToString();
                 requiredCoinText.text = (requiredCoin + 100).ToString();
                 requiredBoltText.text = (requiredBolt + 5).ToString();
-                carController.maxFuel += 5;
+                carController.maxFuel += 6;
                 fuelCapacitySlider.value += 1;
                 collectible.setCoin(collectible.getCoin() - requiredCoin);
                 collectible.setBolt(collectible.getBolt() - requiredBolt);
@@ -121,7 +121,7 @@ public class UIManager : MonoBehaviour
                 enginePowerText.text = "Engine Power Lvl. " + enginePowerLevel.ToString();
                 requiredCoinTextEngine.text = (requiredCoin + 200).ToString();
                 requiredBoltTextEngine.text = (requiredBolt + 10).ToString();
-                carController.maxAcceleration += 50;
+                carController.maxAcceleration += 15;
                 enginePowerSlider.value += 1;
                 collectible.setCoin(collectible.getCoin() - requiredCoin);
                 collectible.setBolt(collectible.getBolt() - requiredBolt);
@@ -234,6 +234,10 @@ public class UIManager : MonoBehaviour
         topUI.SetActive(false);
         vehicle.GetComponent<CarController>().enabled = false;
         zombieSpawner.DestroyAllPrefabs();
+        foreach (var wheel in carController.wheels)
+        {
+            wheel.wheelCollider.motorTorque = 0;
+        }
 
         if (turretController != null)
         {

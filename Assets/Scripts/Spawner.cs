@@ -1,6 +1,7 @@
 using UnityEngine;
+using DG.Tweening;
 
-public class ZombieSpawner : MonoBehaviour
+public class Spawner : MonoBehaviour
 {
     public Transform zombieSpawnPointList;
     public Transform barrelSpawnPointList;
@@ -9,7 +10,7 @@ public class ZombieSpawner : MonoBehaviour
     public GameObject barrelPrefab;
     public GameObject boltPrefab;
 
-    public void SpawnZombies()
+    public void SpawnPrefabs()
     {
         foreach (Transform spawnPoint in zombieSpawnPointList)
         {
@@ -46,6 +47,7 @@ public class ZombieSpawner : MonoBehaviour
         foreach (GameObject bolt in bolts)
         {
             Destroy(bolt);
+            DOTween.Kill(bolt.transform);
         }
     }
 }

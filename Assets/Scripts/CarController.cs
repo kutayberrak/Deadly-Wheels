@@ -9,6 +9,7 @@ public class CarController : MonoBehaviour
     public int currentFuel = 0;
     public bool isLost;
     public bool isWin;
+    private bool isGrounded;
     public FuelBar fuelBar;
     private Collectible collectible;
 
@@ -46,11 +47,13 @@ public class CarController : MonoBehaviour
         AnimateWheels();
         WheelEffects();
         transform.position = new Vector3(transform.position.x, transform.position.y, 225f);
+        //CheckGrounded();
     }
 
     private void LateUpdate()
     {
         Move();
+        //ApplyConstraints();
     }
 
     void GetInput()
@@ -172,4 +175,34 @@ public class CarController : MonoBehaviour
             isWin = true;
         }
     }
+    /*private void CheckGrounded()
+    {
+        isGrounded = false; // Assume not grounded until proven otherwise
+        foreach (var wheel in wheels)
+        {
+            if (wheel.wheelCollider.isGrounded)
+            {
+                isGrounded = true;
+                Debug.Log("Yerde");
+                break; // Exit the loop early if any wheel is grounded
+            }
+        }
+        if (!isGrounded)
+        {
+            Debug.Log("Havada");
+        }
+    }
+
+    private void ApplyConstraints()
+    {
+        if (!isGrounded)
+        {
+            rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+        }
+        else
+        {
+            rb.constraints = RigidbodyConstraints.FreezeRotationY;
+        }
+    }
+    */
 }
