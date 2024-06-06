@@ -31,6 +31,11 @@ public class CarController : MonoBehaviour
     private float moveInput;
     private Rigidbody rb;
 
+    public float nitrousDuration = 10.0f;  // Total nitrous time in seconds
+    private float remainingNitrous;
+    private bool isUsingNitrous = false;
+    public float nitrousBoost = 5.0f;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -39,6 +44,8 @@ public class CarController : MonoBehaviour
 
         //StartCoroutine(DecreaseFuelOverTime());
         collectible = transform.GetComponent<Collectible>();
+
+        remainingNitrous = nitrousDuration;
     }
 
     private void Update()
@@ -59,6 +66,18 @@ public class CarController : MonoBehaviour
     void GetInput()
     {
         moveInput = Input.GetAxis("Vertical");
+
+        if (Input.GetKey(KeyCode.Space) && remainingNitrous > 0)
+        {
+            if (!isUsingNitrous)
+            {
+                StartCoroutine(UseNitrous());
+            }
+        }
+        else
+        {
+            isUsingNitrous = false;
+        }
     }
 
     void Move()
@@ -68,7 +87,11 @@ public class CarController : MonoBehaviour
             collectible.enabled = true;
             foreach (var wheel in wheels)
             {
-                wheel.wheelCollider.motorTorque = -moveInput * 600 * maxAcceleration * Time.deltaTime;
+                float appliedAcceleration = isUsingNitrous ? maxAcceleration * nitrousBoost : maxAcceleration;
+                Debug.Log(isUsingNitrous);
+                Debug.Log(appliedAcceleration);
+                Debug.Log(remainingNitrous);
+                wheel.wheelCollider.motorTorque = -moveInput * 600 * appliedAcceleration * Time.deltaTime;
             }
             if(moveInput > 0 && rb.velocity.magnitude > 0)
             {
@@ -205,4 +228,15 @@ public class CarController : MonoBehaviour
         }
     }
     */
+
+    IEnumerator UseNitrous()
+    {
+        isUsingNitrous = true;
+        while (isUsingNitrous && remainingNitrous > 0)
+        {
+            remainingNitrous -= Time.deltaTime;
+            yield return null;
+        }
+        isUsingNitrous = false;
+    }
 }
