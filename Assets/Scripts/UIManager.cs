@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class UIManager : MonoBehaviour
     public GameObject turret;
     public GameObject feedbackPanel;
 
+    //Upgrades
     public Button upgradeFuelCapacityButton;
     public TextMeshProUGUI requiredCoinText;
     public TextMeshProUGUI requiredBoltText;
@@ -33,9 +35,9 @@ public class UIManager : MonoBehaviour
     private CameraMovement cameraMovement;
     private CarController carController;
     private Collectible collectible;
-    private Spawner zombieSpawner;
+    private Spawner spawner;
     private TurretController turretController;
-    //private ZombieBehaviour zombieBehaviour;
+    private ZombieBehaviour zombieBehaviour;
 
     public TextMeshProUGUI fuelCapacityText;
     private int fuelCapacityLevel = 0;
@@ -47,6 +49,22 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI feedBackText;
     public TextMeshProUGUI subFeedBackText;
     private Vector3 initialPosition;
+
+    //Feedback Panel (Statistics)
+    public Button restartButton;
+    public Button nextLevelButton;
+    private int beforeCoinAmount;
+    private int beforeBoltAmount;
+    private int totalAttemptCount = 0;
+
+
+    public TextMeshProUGUI totalDistanceText;
+    public TextMeshProUGUI killedZombiesText;
+    public TextMeshProUGUI attemptCountText;
+    public TextMeshProUGUI gatheredCoinInAttemptText;
+    public TextMeshProUGUI gatheredBoltInAttemptText;
+    public TextMeshProUGUI levelText;
+
     void Start()
     {
         topUI.SetActive(false);
@@ -55,15 +73,14 @@ public class UIManager : MonoBehaviour
         cameraMovement = FindObjectOfType<CameraMovement>();
         carController = FindObjectOfType<CarController>();
         collectible = FindObjectOfType<Collectible>();
-        zombieSpawner = FindObjectOfType<Spawner>();
-        //zombieBehaviour = FindObjectOfType<ZombieBehaviour>();
-
+        spawner = FindObjectOfType<Spawner>();
+        
         fuelCapacityText.text = "Fuel Capacity Lvl. " + fuelCapacityLevel.ToString();
         enginePowerText.text = "Engine Power Lvl. " + enginePowerLevel.ToString();
         initialPosition = vehicle.transform.position;
     }
 
-    
+
 
     public void StartGame()
     {
@@ -74,7 +91,15 @@ public class UIManager : MonoBehaviour
         carController.currentFuel = carController.maxFuel;
         carController.fuelBar.setMaxFuel(carController.maxFuel);
         StartCoroutine(carController.DecreaseFuelOverTime());
-        zombieSpawner.SpawnPrefabs();
+        spawner.SpawnPrefabs();
+        totalAttemptCount += 1;
+
+        if (zombieBehaviour != null) { 
+        zombieBehaviour.deathCounter = 0;
+        }
+
+        beforeCoinAmount = collectible.getCoin();
+        beforeBoltAmount = collectible.getBolt();
     }
 
 
@@ -203,22 +228,48 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    private void CalculateStatistics()
+    {
+        int currentLevel = SceneManager.GetActiveScene().buildIndex + 1;
+        int currentCoin = collectible.getCoin();
+        int currentBolt = collectible.getBolt();
+
+        totalDistanceText.text = collectible.totalDistanceTravelled.ToString() + "m";
+        killedZombiesText.text = spawner.CalculateKilledZombies().ToString();
+        attemptCountText.text = totalAttemptCount.ToString();
+        gatheredCoinInAttemptText.text = (currentCoin - beforeCoinAmount).ToString();
+        gatheredBoltInAttemptText.text = (currentBolt - beforeBoltAmount).ToString();
+        levelText.text = currentLevel + "/3";
+    }
+
     public void ShowFeedbackPanel()
     {
+        CalculateStatistics();
+
         if (carController.isLost){
             feedbackPanel.SetActive(true);
             feedBackText.text = "You Lost";
             subFeedBackText.text = "The fuel is depleted!";
-            //totalDistanceText.text = collectible.distanceTraveled.ToString() + " m";
-            //killedZombieText.text = zombieBehaviour.deathCounter.ToString();
+            restartButton.gameObject.SetActive(true);
+            nextLevelButton.gameObject.SetActive(false);
         }
 
         else if (carController.isWin)
         {
             feedbackPanel.SetActive(true);
             feedBackText.text = "You Won";
-            subFeedBackText.text = "You successfully reached your destination!";
-        } 
+            restartButton.gameObject.SetActive(false); 
+
+            if(SceneManager.GetActiveScene().buildIndex != 2)
+            {
+                nextLevelButton.gameObject.SetActive(true);
+                subFeedBackText.text = "You successfully completed Level " + (SceneManager.GetActiveScene().buildIndex + 1);
+            }
+            else
+            {
+                subFeedBackText.text = "Congrats!!! You reached your final destination!";
+            } 
+        }
     }
 
     public void Restart()
@@ -233,7 +284,7 @@ public class UIManager : MonoBehaviour
         marketPanel.SetActive(true);
         topUI.SetActive(false);
         vehicle.GetComponent<CarController>().enabled = false;
-        zombieSpawner.DestroyAllPrefabs();
+        spawner.DestroyAllPrefabs();
         foreach (var wheel in carController.wheels)
         {
             wheel.wheelCollider.motorTorque = 0;
@@ -243,5 +294,10 @@ public class UIManager : MonoBehaviour
         {
             turretController.currentAmmo = turretController.maxAmmo;
         }
+    }
+
+    public void NextLevel()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }

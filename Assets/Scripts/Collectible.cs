@@ -9,21 +9,25 @@ public class Collectible : MonoBehaviour
     public TextMeshProUGUI coinCounterText;
 
     private float lastCoinPositionX;
+    private float initialPositionX;
     float currentPositionX;
     private float coinDistanceThreshold = 10f;
-    public float distanceTraveled;
+    private float distanceTraveledAfterCoin;
+    public float totalDistanceTravelled;
 
 
     private void Start()
     {
+        initialPositionX = transform.position.x;
         lastCoinPositionX = transform.position.x;
     }
     private void Update()
     {
         currentPositionX = transform.position.x;
-        distanceTraveled = Mathf.Abs(currentPositionX - lastCoinPositionX);
+        distanceTraveledAfterCoin = Mathf.Abs(currentPositionX - lastCoinPositionX);
+        totalDistanceTravelled = Mathf.Abs(currentPositionX - initialPositionX);
 
-        if (distanceTraveled >= coinDistanceThreshold)
+        if (distanceTraveledAfterCoin >= coinDistanceThreshold)
         {
             GainCoinAtPositionX();
             lastCoinPositionX = currentPositionX;

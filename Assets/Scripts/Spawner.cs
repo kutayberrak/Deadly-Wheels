@@ -10,11 +10,14 @@ public class Spawner : MonoBehaviour
     public GameObject barrelPrefab;
     public GameObject boltPrefab;
 
+    private int spawnedZombieCount;
     public void SpawnPrefabs()
     {
+        spawnedZombieCount = 0;
         foreach (Transform spawnPoint in zombieSpawnPointList)
         {
             Instantiate(zombiePrefab, spawnPoint.position, Quaternion.Euler(0, -90, 0));
+            spawnedZombieCount += 1;
         }
 
         foreach (Transform spawnPoint in barrelSpawnPointList)
@@ -28,13 +31,20 @@ public class Spawner : MonoBehaviour
         }
     }
 
+    public int CalculateKilledZombies()
+    {
+        GameObject[] zombies = GameObject.FindGameObjectsWithTag("Enemy");
+        int remainingZombies = zombies.Length;
+        return spawnedZombieCount - remainingZombies;
+    }
+
     public void DestroyAllPrefabs()
     {
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        GameObject[] zombies = GameObject.FindGameObjectsWithTag("Enemy");
         GameObject[] barrels = GameObject.FindGameObjectsWithTag("Barrel");
         GameObject[] bolts = GameObject.FindGameObjectsWithTag("Bolt");
 
-        foreach (GameObject enemy in enemies)
+        foreach (GameObject enemy in zombies)
         {
             Destroy(enemy);
         }
