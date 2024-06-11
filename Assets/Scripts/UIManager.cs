@@ -2,16 +2,18 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class UIManager : MonoBehaviour
 {
+    private Vector3 initialPosition;
     public GameObject marketPanel;
     public GameObject vehicle;
     public GameObject topUI;
     public GameObject turret;
     public GameObject feedbackPanel;
 
-    //Upgrades
+    [Header("Upgrades")]
     public Button upgradeFuelCapacityButton;
     public TextMeshProUGUI requiredCoinText;
     public TextMeshProUGUI requiredBoltText;
@@ -28,9 +30,8 @@ public class UIManager : MonoBehaviour
     public Button purchaseAmmoButton;
     public TextMeshProUGUI ammoText;
 
-
     public Slider fuelCapacitySlider; 
-    public Slider enginePowerSlider; 
+    public Slider enginePowerSlider;
 
     private CameraMovement cameraMovement;
     private CarController carController;
@@ -45,18 +46,14 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI enginePowerText;
     private int enginePowerLevel = 0;
 
-
+    [Header("Feedback Panel (Statistics)")]
     public TextMeshProUGUI feedBackText;
     public TextMeshProUGUI subFeedBackText;
-    private Vector3 initialPosition;
-
-    //Feedback Panel (Statistics)
     public Button restartButton;
     public Button nextLevelButton;
     private int beforeCoinAmount;
     private int beforeBoltAmount;
     private int totalAttemptCount = 0;
-
 
     public TextMeshProUGUI totalDistanceText;
     public TextMeshProUGUI killedZombiesText;
@@ -64,6 +61,11 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI gatheredCoinInAttemptText;
     public TextMeshProUGUI gatheredBoltInAttemptText;
     public TextMeshProUGUI levelText;
+
+    [Header("Loading Screen")]
+    public GameObject loadingScreen;
+    public Slider loadingSlider;
+    public TextMeshProUGUI loadingText;
 
     void Start()
     {
@@ -79,8 +81,6 @@ public class UIManager : MonoBehaviour
         enginePowerText.text = "Engine Power Lvl. " + enginePowerLevel.ToString();
         initialPosition = vehicle.transform.position;
     }
-
-
 
     public void StartGame()
     {
@@ -209,12 +209,12 @@ public class UIManager : MonoBehaviour
 
     public void SetCoinDebug()
     {
-        collectible.setCoin(collectible.getCoin() + 1000);
+        collectible.setCoin(collectible.getCoin() + 10000);
     }
 
     public void SetBoltDebug()
     {
-        collectible.setBolt(collectible.getBolt() + 100);
+        collectible.setBolt(collectible.getBolt() + 1000);
     }
 
     private void Update()
@@ -298,6 +298,32 @@ public class UIManager : MonoBehaviour
 
     public void NextLevel()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        loadingScreen.SetActive(true);
+
+        if (SceneManager.GetActiveScene().buildIndex != 2)
+        {
+            StartCoroutine(LoadNextLevel(SceneManager.GetActiveScene().buildIndex + 1));
+        }
+        else
+        {
+            Application.Quit();
+        }
+        
+    }
+
+    IEnumerator LoadNextLevel(int level)
+    {
+        float duration = 3f; 
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            float progress = Mathf.Clamp01(elapsedTime / duration);
+            loadingSlider.value = progress;
+            loadingText.text = "Level " + (SceneManager.GetActiveScene().buildIndex + 1) + " is loading... " + Mathf.RoundToInt(progress * 100) + "%";
+            yield return null;
+        }       
+        SceneManager.LoadScene(level);
     }
 }
