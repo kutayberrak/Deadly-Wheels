@@ -11,10 +11,12 @@ public class CarController : MonoBehaviour
     public bool isWin;
     private bool isGrounded;
     public FuelBar fuelBar;
+    public NitrousBar nitrousBar;
     private Collectible collectible;
 
     public ParticleSystem smokeEffect1;
     public ParticleSystem smokeEffect2;
+    private Color originalSmokeColor;
 
     [Serializable]
     public struct Wheel
@@ -45,7 +47,9 @@ public class CarController : MonoBehaviour
         //StartCoroutine(DecreaseFuelOverTime());
         collectible = transform.GetComponent<Collectible>();
 
+        originalSmokeColor = smokeEffect1.main.startColor.color;
         remainingNitrous = nitrousDuration;
+        nitrousBar.SetMaxNitrous(nitrousDuration);
     }
 
     private void Update()
@@ -54,6 +58,9 @@ public class CarController : MonoBehaviour
         AnimateWheels();
         WheelEffects();
         transform.position = new Vector3(transform.position.x, transform.position.y, 225f);
+
+        nitrousBar.SetNitrous(remainingNitrous);
+
         //CheckGrounded();
     }
 
@@ -232,11 +239,20 @@ public class CarController : MonoBehaviour
     IEnumerator UseNitrous()
     {
         isUsingNitrous = true;
+        ChangeSmokeColor(Color.blue);
         while (isUsingNitrous && remainingNitrous > 0)
         {
             remainingNitrous -= Time.deltaTime;
             yield return null;
         }
         isUsingNitrous = false;
+        ChangeSmokeColor(originalSmokeColor);  
+    }
+    private void ChangeSmokeColor(Color color)
+    {
+        var main1 = smokeEffect1.main;
+        main1.startColor = color;
+        var main2 = smokeEffect2.main;
+        main2.startColor = color;
     }
 }
