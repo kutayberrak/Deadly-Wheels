@@ -9,6 +9,7 @@ public class CarController : MonoBehaviour
     public int currentFuel = 0;
     public bool isLost;
     public bool isWin;
+    public bool isNitroPurchased;
     private bool isGrounded;
     public FuelBar fuelBar;
     public NitrousBar nitrousBar;
@@ -33,8 +34,8 @@ public class CarController : MonoBehaviour
     private float moveInput;
     private Rigidbody rb;
 
-    public float nitrousDuration = 10.0f;  // Total nitrous time in seconds
-    private float remainingNitrous;
+    public float nitrousDuration = 10.0f;  
+    public float remainingNitrous;
     private bool isUsingNitrous = false;
     public float nitrousBoost = 5.0f;
 
@@ -44,7 +45,6 @@ public class CarController : MonoBehaviour
         currentFuel = maxFuel;
         fuelBar.setMaxFuel(maxFuel);
 
-        //StartCoroutine(DecreaseFuelOverTime());
         collectible = transform.GetComponent<Collectible>();
 
         originalSmokeColor = smokeEffect1.main.startColor.color;
@@ -70,13 +70,14 @@ public class CarController : MonoBehaviour
         //ApplyConstraints();
     }
 
+    
     void GetInput()
     {
         moveInput = Input.GetAxis("Vertical");
 
-        if (Input.GetKey(KeyCode.Space) && remainingNitrous > 0)
+        if (Input.GetKey(KeyCode.Space) && isNitroPurchased)
         {
-            if (!isUsingNitrous)
+            if (!isUsingNitrous && remainingNitrous > 0)
             {
                 StartCoroutine(UseNitrous());
             }

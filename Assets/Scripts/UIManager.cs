@@ -12,26 +12,7 @@ public class UIManager : MonoBehaviour
     public GameObject topUI;
     public GameObject turret;
     public GameObject feedbackPanel;
-
-    [Header("Upgrades")]
-    public Button upgradeFuelCapacityButton;
-    public TextMeshProUGUI requiredCoinText;
-    public TextMeshProUGUI requiredBoltText;
-
-    public Button upgradeEnginePowerButton;
-    public TextMeshProUGUI requiredCoinTextEngine;
-    public TextMeshProUGUI requiredBoltTextEngine;
-
-    public Button purchaseTurretButton;
-    public TextMeshProUGUI purchaseTurretButtonText;
-    public TextMeshProUGUI requiredCoinTextTurret;
-    public TextMeshProUGUI requiredBoltTextTurret;
-
-    public Button purchaseAmmoButton;
-    public TextMeshProUGUI ammoText;
-
-    public Slider fuelCapacitySlider; 
-    public Slider enginePowerSlider;
+    public GameObject nitrousBar;
 
     private CameraMovement cameraMovement;
     private CarController carController;
@@ -40,11 +21,39 @@ public class UIManager : MonoBehaviour
     private TurretController turretController;
     private ZombieBehaviour zombieBehaviour;
 
+    [Header("Upgrades")]
+    public Slider fuelCapacitySlider; 
+    public Slider enginePowerSlider;
     public TextMeshProUGUI fuelCapacityText;
     private int fuelCapacityLevel = 0;
 
     public TextMeshProUGUI enginePowerText;
     private int enginePowerLevel = 0;
+
+    [Header("Fuel Capacity Upgrade")]
+    public Button upgradeFuelCapacityButton;
+    public TextMeshProUGUI requiredCoinText;
+    public TextMeshProUGUI requiredBoltText;
+
+    [Header("Engine Upgrade")]
+    public Button upgradeEnginePowerButton;
+    public TextMeshProUGUI requiredCoinTextEngine;
+    public TextMeshProUGUI requiredBoltTextEngine;
+
+    [Header("Turret Upgrade")]
+    public Button purchaseTurretButton;
+    public TextMeshProUGUI purchaseTurretButtonText;
+    public TextMeshProUGUI requiredCoinTextTurret;
+    public TextMeshProUGUI requiredBoltTextTurret;
+
+    public Button purchaseAmmoButton;
+    public TextMeshProUGUI ammoText;
+
+    [Header("Nitrous Upgrade")]
+    public Button purchaseNitrousButton;
+    public TextMeshProUGUI purchaseNitrousButtonText;
+    public TextMeshProUGUI requiredCoinTextNitrous;
+    public TextMeshProUGUI requiredBoltTextNitrous;
 
     [Header("Feedback Panel (Statistics)")]
     public TextMeshProUGUI feedBackText;
@@ -206,6 +215,26 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void purchaseNitrous()
+    {
+        int requiredCoin = int.Parse(requiredCoinTextNitrous.text);
+        int requiredBolt = int.Parse(requiredBoltTextNitrous.text);
+        if (collectible.getCoin() >= requiredCoin && collectible.getBolt() >= requiredBolt)
+        {
+            requiredCoinTextTurret.text = 0.ToString();
+            requiredBoltTextTurret.text = 0.ToString();
+            collectible.setCoin(collectible.getCoin() - requiredCoin);
+            collectible.setBolt(collectible.getBolt() - requiredBolt);
+            purchaseNitrousButton.interactable = false;
+            purchaseNitrousButtonText.text = "Purchased";
+            nitrousBar.SetActive(true);
+            carController.isNitroPurchased = true;
+        }
+        else
+        {
+            Debug.Log("Sources are not enough!");
+        }
+    }
 
     public void SetCoinDebug()
     {
@@ -285,6 +314,8 @@ public class UIManager : MonoBehaviour
         topUI.SetActive(false);
         vehicle.GetComponent<CarController>().enabled = false;
         spawner.DestroyAllPrefabs();
+        carController.remainingNitrous = carController.nitrousDuration;
+        carController.nitrousBar.SetMaxNitrous(carController.nitrousDuration);
         foreach (var wheel in carController.wheels)
         {
             wheel.wheelCollider.motorTorque = 0;
