@@ -124,8 +124,8 @@ public class UIManager : MonoBehaviour
             {
                 fuelCapacityLevel += 1;
                 fuelCapacityText.text = "Fuel Capacity Lvl. " + fuelCapacityLevel.ToString();
-                requiredCoinText.text = (requiredCoin + 100).ToString();
-                requiredBoltText.text = (requiredBolt + 5).ToString();
+                requiredCoinText.text = (requiredCoin + 5).ToString();
+                requiredBoltText.text = (requiredBolt + 1).ToString();
                 carController.maxFuel += 10;
                 fuelCapacitySlider.value += 1;
                 collectible.setCoin(collectible.getCoin() - requiredCoin);
@@ -155,8 +155,8 @@ public class UIManager : MonoBehaviour
             {
                 enginePowerLevel += 1;
                 enginePowerText.text = "Engine Power Lvl. " + enginePowerLevel.ToString();
-                requiredCoinTextEngine.text = (requiredCoin + 200).ToString();
-                requiredBoltTextEngine.text = (requiredBolt + 10).ToString();
+                requiredCoinTextEngine.text = (requiredCoin + 5).ToString();
+                requiredBoltTextEngine.text = (requiredBolt + 1).ToString();
                 carController.maxAcceleration += 15;
                 enginePowerSlider.value += 1;
                 collectible.setCoin(collectible.getCoin() - requiredCoin);
