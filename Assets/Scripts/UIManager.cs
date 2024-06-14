@@ -126,7 +126,7 @@ public class UIManager : MonoBehaviour
                 fuelCapacityText.text = "Fuel Capacity Lvl. " + fuelCapacityLevel.ToString();
                 requiredCoinText.text = (requiredCoin + 100).ToString();
                 requiredBoltText.text = (requiredBolt + 5).ToString();
-                carController.maxFuel += 6;
+                carController.maxFuel += 10;
                 fuelCapacitySlider.value += 1;
                 collectible.setCoin(collectible.getCoin() - requiredCoin);
                 collectible.setBolt(collectible.getBolt() - requiredBolt);

@@ -11,7 +11,7 @@ public class Collectible : MonoBehaviour
     private float lastCoinPositionX;
     private float initialPositionX;
     float currentPositionX;
-    private float coinDistanceThreshold = 10f;
+    private float coinDistanceThreshold = 5f;
     private float distanceTraveledAfterCoin;
     public float totalDistanceTravelled;
 
