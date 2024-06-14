@@ -85,6 +85,8 @@ public class UIManager : MonoBehaviour
         carController = FindObjectOfType<CarController>();
         collectible = FindObjectOfType<Collectible>();
         spawner = FindObjectOfType<Spawner>();
+
+        carController.enabled = false;
         
         fuelCapacityText.text = "Fuel Capacity Lvl. " + fuelCapacityLevel.ToString();
         enginePowerText.text = "Engine Power Lvl. " + enginePowerLevel.ToString();
@@ -306,13 +308,22 @@ public class UIManager : MonoBehaviour
         carController.isLost = false;
         carController.isWin = false;
         vehicle.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        vehicle.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
         foreach (var wheel in carController.wheels)
         {
             wheel.wheelCollider.motorTorque = 0;
         }
 
         vehicle.transform.position = initialPosition + new Vector3(0,1,0);
-        vehicle.transform.rotation = Quaternion.Euler(0, -90, 0);
+        
+        if (vehicle.CompareTag("Police"))
+        {
+            vehicle.transform.rotation = Quaternion.Euler(0, 90, 0);
+        }
+        else
+        {
+            vehicle.transform.rotation = Quaternion.Euler(0, -90, 0);
+        }
         feedbackPanel.SetActive(false);
         cameraMovement.ToggleCameraMode();
         marketPanel.SetActive(true);

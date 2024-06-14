@@ -251,7 +251,15 @@ public class CarController : MonoBehaviour
             Debug.Log("Havada");
             float horizontalInput = Input.GetAxis("Horizontal");
             float rotationSpeed = 50f; // Adjust the rotation speed as needed
-            transform.Rotate(Vector3.left, horizontalInput * rotationSpeed * Time.deltaTime);
+
+            if (gameObject.tag == "Vehicle")
+            {
+                transform.Rotate(Vector3.left, horizontalInput * rotationSpeed * Time.deltaTime);
+            }
+            else
+            {
+                transform.Rotate(Vector3.right, horizontalInput * rotationSpeed * Time.deltaTime);
+            }
 
             if (IsAnyWheelOnGround())
             {
@@ -266,8 +274,16 @@ public class CarController : MonoBehaviour
 
 
             Vector3 localEulerAngles = transform.localEulerAngles;
-            localEulerAngles.y = -90f;
-            localEulerAngles.z = 0f;
+            if (gameObject.tag == "Vehicle")
+            {
+                localEulerAngles.y = -90f;
+                localEulerAngles.z = 0f;
+            }
+            else
+            {
+                
+            }
+            
             transform.localEulerAngles = localEulerAngles;
         }
         else

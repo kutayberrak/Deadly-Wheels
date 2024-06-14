@@ -10,7 +10,7 @@ public class ZombieBehaviour : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (!hit && collision.gameObject.CompareTag("Vehicle"))
+        if (!hit && (collision.gameObject.CompareTag("Vehicle") || collision.gameObject.CompareTag("Police")))
         {
             hit = true;
             animator.SetTrigger("isHit");

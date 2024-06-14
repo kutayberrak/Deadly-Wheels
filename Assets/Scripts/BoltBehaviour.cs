@@ -10,7 +10,7 @@ public class BoltBehaviour : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Vehicle"))
+        if (other.transform.parent.CompareTag("Vehicle") || other.transform.parent.CompareTag("Police"))
         {
             DOTween.Kill(transform);
             other.GetComponentInParent<Collectible>().IncreaseBoltCount();
