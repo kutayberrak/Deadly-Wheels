@@ -61,8 +61,6 @@ public class CarController : MonoBehaviour
         nitrousBar.SetNitrous(remainingNitrous);
 
         CheckGrounded();
-
-        Debug.Log(GetComponent<Rigidbody>().velocity);
     }
 
     private void LateUpdate()
@@ -250,6 +248,7 @@ public class CarController : MonoBehaviour
 
         if (!isGrounded)
         {
+            Debug.Log("Havada");
             float horizontalInput = Input.GetAxis("Horizontal");
             float rotationSpeed = 50f; // Adjust the rotation speed as needed
             transform.Rotate(Vector3.left, horizontalInput * rotationSpeed * Time.deltaTime);
@@ -274,6 +273,7 @@ public class CarController : MonoBehaviour
         else
         { 
             BrakeEffect();
+            Debug.Log("Yerde");
         }
     }
     IEnumerator FillNitrous()
