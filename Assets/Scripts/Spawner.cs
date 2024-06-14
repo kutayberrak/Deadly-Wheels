@@ -13,6 +13,7 @@ public class Spawner : MonoBehaviour
     private int spawnedZombieCount;
     public void SpawnPrefabs()
     {
+        /*
         spawnedZombieCount = 0;
         foreach (Transform spawnPoint in zombieSpawnPointList)
         {
@@ -29,6 +30,7 @@ public class Spawner : MonoBehaviour
         {
             Instantiate(boltPrefab, spawnPoint.position, Quaternion.Euler(0, -90, 0));
         }
+        */
     }
 
     public int CalculateKilledZombies()

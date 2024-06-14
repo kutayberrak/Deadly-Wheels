@@ -56,18 +56,18 @@ public class CarController : MonoBehaviour
     {
         GetInput();
         AnimateWheels();
-        WheelEffects();
         transform.position = new Vector3(transform.position.x, transform.position.y, 225f);
 
         nitrousBar.SetNitrous(remainingNitrous);
 
-        //CheckGrounded();
+        CheckGrounded();
+
+        Debug.Log(GetComponent<Rigidbody>().velocity);
     }
 
     private void LateUpdate()
     {
         Move();
-        //ApplyConstraints();
     }
 
     
@@ -96,10 +96,14 @@ public class CarController : MonoBehaviour
             foreach (var wheel in wheels)
             {
                 float appliedAcceleration = isUsingNitrous ? maxAcceleration * nitrousBoost : maxAcceleration;
-                Debug.Log(isUsingNitrous);
-                Debug.Log(appliedAcceleration);
-                Debug.Log(remainingNitrous);
-                wheel.wheelCollider.motorTorque = -moveInput * 600 * appliedAcceleration * Time.deltaTime;
+                if (gameObject.tag == "Vehicle")
+                {
+                    wheel.wheelCollider.motorTorque = -moveInput * 600 * appliedAcceleration * Time.deltaTime;
+                }
+                else
+                {
+                    wheel.wheelCollider.motorTorque = moveInput * 600 * appliedAcceleration * Time.deltaTime;
+                }
             }
             if(moveInput > 0 && rb.velocity.magnitude > 0)
             {
@@ -125,11 +129,20 @@ public class CarController : MonoBehaviour
             smokeEffect2.Stop();
             collectible.enabled = false;
 
-            float deceleration = 7f; 
-            rb.velocity = Vector3.MoveTowards(rb.velocity, Vector3.zero, deceleration * Time.deltaTime);
+            float deceleration = 7f;
+
+            if (isGrounded)
+            {
+                rb.velocity = Vector3.MoveTowards(rb.velocity, Vector3.zero, deceleration * Time.deltaTime);
+            }
+            else
+            {
+                rb.velocity = Vector3.zero;
+            }
+            
             foreach (var wheel in wheels)
             {
-                wheel.wheelCollider.motorTorque = 0 * 600 * maxAcceleration * Time.deltaTime;
+                wheel.wheelCollider.motorTorque = 0;
             }
 
             if (CheckVelocity() && !isWin)
@@ -151,7 +164,7 @@ public class CarController : MonoBehaviour
         }
     }
 
-    void WheelEffects()
+    void BrakeEffect()
     {
         foreach (var wheel in wheels)
         {
@@ -206,36 +219,76 @@ public class CarController : MonoBehaviour
             isWin = true;
         }
     }
-    /*private void CheckGrounded()
+
+    private bool IsAnyWheelOnGround()
     {
-        isGrounded = false; // Assume not grounded until proven otherwise
         foreach (var wheel in wheels)
         {
             if (wheel.wheelCollider.isGrounded)
             {
-                isGrounded = true;
-                Debug.Log("Yerde");
-                break; // Exit the loop early if any wheel is grounded
+                return true;
             }
         }
+        return false;
+    }
+
+  
+
+    private void CheckGrounded()
+    {
+        isGrounded = true; 
+        
+
+        foreach (var wheel in wheels)
+        {
+            if (!wheel.wheelCollider.isGrounded)
+            {
+                isGrounded = false;
+                break; 
+            }
+        }
+
         if (!isGrounded)
         {
-            Debug.Log("Havada");
+            float horizontalInput = Input.GetAxis("Horizontal");
+            float rotationSpeed = 50f; // Adjust the rotation speed as needed
+            transform.Rotate(Vector3.left, horizontalInput * rotationSpeed * Time.deltaTime);
+
+            if (IsAnyWheelOnGround())
+            {
+                rb.constraints &= ~RigidbodyConstraints.FreezeRotationX; 
+            }
+            else
+            {
+                rb.constraints |= RigidbodyConstraints.FreezeRotationX; 
+            }
+
+            StartCoroutine(FillNitrous());
+
+
+            Vector3 localEulerAngles = transform.localEulerAngles;
+            localEulerAngles.y = -90f;
+            localEulerAngles.z = 0f;
+            transform.localEulerAngles = localEulerAngles;
+        }
+        else
+        { 
+            BrakeEffect();
+        }
+    }
+    IEnumerator FillNitrous()
+    {
+        float nitrousFillSpeed = 0.001f;
+        while (remainingNitrous <= nitrousDuration)
+        {
+            if (!isGrounded)
+            {
+                remainingNitrous += nitrousFillSpeed * Time.deltaTime;
+            }
+            yield return null;
         }
     }
 
-    private void ApplyConstraints()
-    {
-        if (!isGrounded)
-        {
-            rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
-        }
-        else
-        {
-            rb.constraints = RigidbodyConstraints.FreezeRotationY;
-        }
-    }
-    */
 
     IEnumerator UseNitrous()
     {
@@ -249,6 +302,9 @@ public class CarController : MonoBehaviour
         isUsingNitrous = false;
         ChangeSmokeColor(originalSmokeColor);  
     }
+
+    
+
     private void ChangeSmokeColor(Color color)
     {
         var main1 = smokeEffect1.main;

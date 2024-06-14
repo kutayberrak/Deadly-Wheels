@@ -221,8 +221,8 @@ public class UIManager : MonoBehaviour
         int requiredBolt = int.Parse(requiredBoltTextNitrous.text);
         if (collectible.getCoin() >= requiredCoin && collectible.getBolt() >= requiredBolt)
         {
-            requiredCoinTextTurret.text = 0.ToString();
-            requiredBoltTextTurret.text = 0.ToString();
+            requiredCoinTextNitrous.text = 0.ToString();
+            requiredBoltTextNitrous.text = 0.ToString();
             collectible.setCoin(collectible.getCoin() - requiredCoin);
             collectible.setBolt(collectible.getBolt() - requiredBolt);
             purchaseNitrousButton.interactable = false;
@@ -305,22 +305,25 @@ public class UIManager : MonoBehaviour
     {
         carController.isLost = false;
         carController.isWin = false;
-        vehicle.transform.position = initialPosition + new Vector3(0,1,0);
         vehicle.GetComponent<Rigidbody>().velocity = Vector3.zero;
-        vehicle.transform.rotation = Quaternion.Euler(0, -90, 0);
-        feedbackPanel.SetActive(false);
-        cameraMovement.ToggleCameraMode();
-        marketPanel.SetActive(true);
-        topUI.SetActive(false);
-        vehicle.GetComponent<CarController>().enabled = false;
-        spawner.DestroyAllPrefabs();
-        carController.remainingNitrous = carController.nitrousDuration;
-        carController.nitrousBar.SetMaxNitrous(carController.nitrousDuration);
         foreach (var wheel in carController.wheels)
         {
             wheel.wheelCollider.motorTorque = 0;
         }
 
+        vehicle.transform.position = initialPosition + new Vector3(0,1,0);
+        vehicle.transform.rotation = Quaternion.Euler(0, -90, 0);
+        feedbackPanel.SetActive(false);
+        cameraMovement.ToggleCameraMode();
+        marketPanel.SetActive(true);
+        topUI.SetActive(false);
+       
+        spawner.DestroyAllPrefabs();
+        carController.remainingNitrous = carController.nitrousDuration;
+        carController.nitrousBar.SetMaxNitrous(carController.nitrousDuration);
+        
+
+        vehicle.GetComponent<CarController>().enabled = false;
         if (turretController != null)
         {
             turretController.currentAmmo = turretController.maxAmmo;
